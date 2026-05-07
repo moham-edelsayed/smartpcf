@@ -1,0 +1,8 @@
+- [x] Gather project requirements and topic
+- [x] Create multi-page implementation plan
+- [x] Update `index.html` (Home)
+- [x] Create `team.html`
+- [x] Create `booklet.html`
+- [x] Create `contact.html`
+- [x] Update Navigation styling
+- [x] Create multi-page walkthrough

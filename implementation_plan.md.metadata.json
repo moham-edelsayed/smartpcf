@@ -1,0 +1,7 @@
+{
+  "artifactType":  "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary":  "خطة لتحويل الموقع من صفحة واحدة إلى موقع متعدد الصفحات بناءً على طلب المستخدم.",
+  "updatedAt":  "2026-04-28T17:11:47.088006100Z",
+  "version":  "1",
+  "requestFeedback":  true
+}
