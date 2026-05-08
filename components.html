@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart IoT Healthcare System - Components</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .components-section {
+            background: linear-gradient(180deg, var(--bg-dark) 0%, #060b1b 100%);
+            padding-top: 150px;
+            padding-bottom: 80px;
+        }
+
+        .design-container {
+            display: flex;
+            gap: 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .design-container.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .design-image-wrapper {
+            flex: 1.2;
+            background: #fff;
+            /* Changed to white for better contrast with the provided images */
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 242, 254, 0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .design-image-wrapper img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            display: block;
+            object-fit: contain;
+        }
+
+        /* Sci-Fi Scan Line Effect */
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: var(--primary);
+            box-shadow: 0 0 15px var(--primary), 0 0 30px var(--primary);
+            top: 0;
+            left: 0;
+            opacity: 0.6;
+            animation: scan 4s linear infinite;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        @keyframes scan {
+            0% {
+                top: 0;
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.6;
+            }
+
+            90% {
+                opacity: 0.6;
+            }
+
+            100% {
+                top: 100%;
+                opacity: 0;
+            }
+        }
+
+        .design-legend {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .design-legend h3 {
+            font-size: 1.8rem;
+            color: var(--text-main);
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+
+        .legend-desc {
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .legend-item {
+            display: flex;
+            gap: 20px;
+            background: rgba(4, 8, 20, 0.6);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 242, 254, 0.1);
+            transition: 0.3s;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+
+        .legend-item:hover {
+            background: rgba(0, 242, 254, 0.05);
+            border-color: var(--primary);
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0, 242, 254, 0.1);
+        }
+
+        .legend-item .number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .legend-item .details h4 {
+            font-size: 1.1rem;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .legend-item .details p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 992px) {
+
+            .design-container,
+            .design-container.reverse {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">IoT<span>Health</span></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="team.html">Team</a></li>
+            <li><a href="components.html" class="active">Components</a></li>
+            <li><a href="booklet.html">Booklet</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="hamburger">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <section id="architecture" class="components-section page-section">
+        <div class="section-title">
+            <h2>System <span>Components</span></h2>
+            <p>A comprehensive breakdown based on our technical design</p>
+        </div>
+
+        <!-- Part 1: PCF Sensor Cross Section -->
+        <div class="design-container" style="margin-bottom: 100px;">
+            <div class="design-image-wrapper">
+                <div class="scan-line"></div>
+                <!-- صورة تصميم السنسور -->
+                <img src="assets/img/pcf_simulation.jpg" alt="PCF Sensor Simulation"
+                    onerror="this.src='https://placehold.co/800x600/0a0f1e/00f2fe?text=Please+Upload+pcf-simulation.jpg'">
+            </div>
+
+            <div class="design-legend">
+                <h3>PCF Sensor & Optical Modes</h3>
+                <p class="legend-desc">The simulation illustrates the cross-section of the Plasmonic PCF. The colored
+                    regions indicate the electromagnetic mode field distribution.</p>
+
+                <div class="legend-item">
+                    <div class="number">A</div>
+                    <div class="details">
+                        <h4>Air Holes Configuration</h4>
+                        <p>Strategically placed circular air holes that lower the refractive index of the cladding,
+                            forcing the optical signal to remain confined inside the core region.</p>
+                    </div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="number">B</div>
+                    <div class="details">
+                        <h4>Optical Mode Field (Hotspots)</h4>
+                        <p>The intense red/yellow spots represent the electromagnetic field. This indicates where
+                            Surface Plasmon Resonance (SPR) is occurring strongly.</p>
+                    </div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="number">C</div>
+                    <div class="details">
+                        <h4>Analyte Interface</h4>
+                        <p>The boundary where the biological sample meets the plasmonic layer. Any change in the sample
+                            causes a detectable shift in the resonance.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Part 2: IoT Complete Workflow -->
+        <div class="design-container reverse">
+            <div class="design-image-wrapper">
+                <div class="scan-line"></div>
+                <!-- صورة مسار النظام كامل -->
+                <img src="assets/img/iot-workflow.jpg" alt="IoT System Workflow"
+                    onerror="this.src='https://placehold.co/800x600/0a0f1e/00f2fe?text=Please+Upload+iot-workflow.jpg'">
+            </div>
+
+            <div class="design-legend">
+                <h3>IoT Healthcare Workflow</h3>
+                <p class="legend-desc">The data journey from the physical sensor all the way to the doctor's analysis
+                    screen.</p>
+
+                <div class="legend-item">
+                    <div class="number">1</div>
+                    <div class="details">
+                        <h4>PCF Sensor & ACQ</h4>
+                        <p>The physical sensor collects biological shifts, and the Acquisition Unit (ACQ) digitizes
+                            these optical shifts into electrical data.</p>
+                    </div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="number">2</div>
+                    <div class="details">
+                        <h4>IoT Gateway</h4>
+                        <p>A wireless communication module that receives the digitized data and securely transmits it
+                            over the network to the central servers.</p>
+                    </div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="number">3</div>
+                    <div class="details">
+                        <h4>Processing Cloud & DevOps</h4>
+                        <p>The intelligence hub. It stores patient data, applies AI processing, and utilizes DevOps
+                            pipelines for continuous integration and updates.</p>
+                    </div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="number">4</div>
+                    <div class="details">
+                        <h4>Hospital Dashboard</h4>
+                        <p>The final user interface (Display & Analysis) where medical staff can view real-time
+                            analytics, charts, and early disease alerts.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Smart IoT Healthcare System. All Rights Reserved.</p>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+</body>
+
+</html>
