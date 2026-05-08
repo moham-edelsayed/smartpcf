@@ -88,9 +88,14 @@ const observer = new IntersectionObserver((entries, observer) => {
 }, observerOptions);
 
 // Apply fade-up animation initial state to elements
-document.querySelectorAll('.section-title, .team-card, .booklet-info, .info-item').forEach(el => {
+document.querySelectorAll('.booklet-info, .info-item').forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(30px)';
     el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-    observer.observe(el);
 });
+
+// Add Watermark (محمد السيد)
+const watermark = document.createElement('div');
+watermark.className = 'site-watermark';
+watermark.innerHTML = '<div class="watermark-content"><i class="fas fa-code"></i><div class="text-group"><span>Developed By</span><strong>Mohamed Elsayed</strong></div></div>';
+document.body.appendChild(watermark);
