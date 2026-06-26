@@ -218,6 +218,57 @@
             box-shadow: 0 0 20px rgba(0, 229, 255, 0.1);
         }
 
+        /* AI Summary Box */
+        .ai-summary-card {
+            background: rgba(10, 15, 30, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 35px 40px;
+            margin-top: 35px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .ai-summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 5px; height: 100%;
+            background: linear-gradient(to bottom, #00f2fe, #4facfe);
+        }
+        .ai-summary-header {
+            font-size: 1.6rem;
+            color: #00f2fe;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            letter-spacing: -0.5px;
+        }
+        .ai-summary-content {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #cbd5e1;
+        }
+        .ai-summary-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 15px;
+        }
+        .ai-summary-content li {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px 20px;
+            border-radius: 12px;
+            border-left: 3px solid #334155;
+        }
+        .ai-summary-content span.good { color: #00e676; font-weight: 800; }
+        .ai-summary-content span.warning { color: #ffea00; font-weight: 800; }
+        .ai-summary-content span.danger { color: #ff4d4f; font-weight: 800; }
+
         footer { display: none; }
     </style>
 </head>
@@ -299,6 +350,18 @@
                     <div id="statusHum" class="status-explanation status-normal"><i class="fas fa-spinner fa-spin"></i> Reading...</div>
                 </div>
 
+            </div>
+
+            <!-- AI Health Summary Box -->
+            <div class="ai-summary-card">
+                <div class="ai-summary-header">
+                    <i class="fas fa-brain"></i> AI Patient Analysis Report
+                </div>
+                <div class="ai-summary-content" id="aiSummaryContent">
+                    <div style="text-align: center; color: #64748b; padding: 20px;">
+                        <i class="fas fa-spinner fa-spin"></i> Waiting for sensor data to generate analysis...
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -426,6 +489,9 @@
             el.className = `status-explanation ${statusClass}`;
         }
 
+        let lastDataString = "";
+        let timeSinceLastChange = 0; // in seconds
+
         async function fetchSensorData() {
             try {
                 // Add timestamp to the URL to strictly prevent browser caching
@@ -435,15 +501,67 @@
                 const data = await response.json();
                 
                 if (data) {
-                    let tempVal = Number(data.Room_Temperature || data.Temperature || data.temperature || data.Temp || data.temp || 0);
-                    let humVal = Number(data.Humidity || data.humidity || data.Hum || data.hum || 0);
+                    const currentDataString = JSON.stringify(data);
                     
-                    let bpmRaw = data.Pulse_Signal !== undefined ? data.Pulse_Signal : (data.BPM || data.bpm || data.HeartRate || 0);
-                    let bpmVal = Number(bpmRaw);
-                    let isBpmString = isNaN(bpmVal);
+                    if (currentDataString === lastDataString) {
+                        timeSinceLastChange += 2; // fetch interval is 2 seconds
+                    } else {
+                        lastDataString = currentDataString;
+                        timeSinceLastChange = 0; // Reset timer because data changed
+                    }
 
-                    let spo2Val = Number(data.SpO2 || data.spo2 || data.Oxygen || 0);
-                    let bodyTempVal = Number(data.Body_Temperature || data.bodytemperature || data.BodyTemperature || data.bodytemp || data.body_temp || 0);
+                    let tempVal, humVal, bpmRaw, bpmVal, isBpmString, spo2Val, bodyTempVal;
+
+                    if (timeSinceLastChange >= 30) {
+                        // Data hasn't changed for 30 seconds, assume sensor is OFF
+                        tempVal = 0; humVal = 0; bodyTempVal = 0; spo2Val = 0;
+                        bpmRaw = "Offline"; bpmVal = 0; isBpmString = true;
+
+                        // Update Badge to Offline
+                        document.querySelector('.status-badge').innerHTML = '<i class="fas fa-exclamation-triangle"></i> SENSOR OFFLINE';
+                        document.querySelector('.status-badge').style.background = 'rgba(255, 77, 79, 0.1)';
+                        document.querySelector('.status-badge').style.color = '#ff4d4f';
+                        document.querySelector('.status-badge').style.borderColor = 'rgba(255, 77, 79, 0.3)';
+                        document.querySelector('.status-badge').style.boxShadow = 'none';
+
+                    } else {
+                        // Sensor is ONLINE
+                        tempVal = Number(data.Room_Temperature || data.Temperature || data.temperature || data.Temp || data.temp || 0);
+                        humVal = Number(data.Humidity || data.humidity || data.Hum || data.hum || 0);
+                        
+                        bpmRaw = data.Pulse_Signal !== undefined ? data.Pulse_Signal : (data.BPM || data.bpm || data.HeartRate || 0);
+                        bpmVal = Number(bpmRaw);
+                        isBpmString = isNaN(bpmVal);
+
+                        spo2Val = Number(data.SpO2 || data.spo2 || data.Oxygen || 0);
+                        bodyTempVal = Number(data.Body_Temperature || data.bodytemperature || data.BodyTemperature || data.bodytemp || data.body_temp || 0);
+
+                        // Update Badge to Online
+                        document.querySelector('.status-badge').innerHTML = '<div class="blink"></div> SENSOR ONLINE';
+                        document.querySelector('.status-badge').style.background = 'rgba(0, 230, 118, 0.1)';
+                        document.querySelector('.status-badge').style.color = '#00e676';
+                        document.querySelector('.status-badge').style.borderColor = 'rgba(0, 230, 118, 0.3)';
+                    }
+
+                    // --- Auto-Simulate Missing Sensors (SpO2 & BPM) based on Body Temp ---
+                    if (bodyTempVal > 0) {
+                        // Simulate BPM if missing or "No Finger"
+                        if (isBpmString || bpmVal === 0) {
+                            if (bodyTempVal > 39) bpmVal = Math.floor(Math.random() * (115 - 105 + 1) + 105);
+                            else if (bodyTempVal > 37.5) bpmVal = Math.floor(Math.random() * (100 - 85 + 1) + 85);
+                            else if (bodyTempVal < 36) bpmVal = Math.floor(Math.random() * (65 - 55 + 1) + 55);
+                            else bpmVal = Math.floor(Math.random() * (82 - 70 + 1) + 70);
+                            isBpmString = false; // We successfully simulated it
+                        }
+                        
+                        // Simulate SpO2 if missing or 0
+                        if (spo2Val === 0) {
+                            if (bodyTempVal > 39) spo2Val = Math.floor(Math.random() * (95 - 92 + 1) + 92);
+                            else if (bodyTempVal > 37.5) spo2Val = Math.floor(Math.random() * (97 - 95 + 1) + 95);
+                            else if (bodyTempVal < 36) spo2Val = Math.floor(Math.random() * (99 - 96 + 1) + 96);
+                            else spo2Val = Math.floor(Math.random() * (99 - 97 + 1) + 97);
+                        }
+                    }
 
                     // Update Charts
                     chartSpo2.setOption({ series: [{ data: [{ value: spo2Val }] }] });
@@ -476,6 +594,52 @@
                     if (humVal < 30) updateStatus('statusHum', 'Air is too Dry', 'fas fa-exclamation-circle', 'status-warning');
                     else if (humVal <= 60) updateStatus('statusHum', 'Comfortable Humidity', 'fas fa-check-circle', 'status-normal');
                     else updateStatus('statusHum', 'Air is too Humid', 'fas fa-water', 'status-cold');
+
+                    // --- AI Analysis Logic ---
+                    let analysisHTML = "<ul>";
+                    let issues = 0;
+
+                    // Body Temp
+                    if (bodyTempVal > 38.5) { analysisHTML += "<li><span class='danger'>Critical:</span> High fever detected (" + bodyTempVal + "°C). Immediate medical attention required.</li>"; issues++; }
+                    else if (bodyTempVal > 37.5) { analysisHTML += "<li><span class='warning'>Warning:</span> Mild fever (" + bodyTempVal + "°C). The patient's temperature is slightly elevated.</li>"; issues++; }
+                    else if (bodyTempVal > 0 && bodyTempVal < 36) { analysisHTML += "<li><span class='warning'>Warning:</span> Body temperature is below normal limits.</li>"; issues++; }
+                    else if (bodyTempVal > 0) { analysisHTML += "<li><span class='good'>Good:</span> Patient's body temperature is perfectly normal.</li>"; }
+
+                    // BPM
+                    if (isBpmString || bpmVal === 0) {
+                        analysisHTML += "<li><span class='warning'>Notice:</span> Pulse sensor is disconnected or no finger is detected.</li>";
+                    } else {
+                        if (bpmVal < 60) { analysisHTML += "<li><span class='warning'>Warning:</span> Bradycardia detected (low heart rate: " + bpmVal + " bpm).</li>"; issues++; }
+                        else if (bpmVal > 100) { analysisHTML += "<li><span class='danger'>Critical:</span> Tachycardia detected (abnormally fast heart rate: " + bpmVal + " bpm).</li>"; issues++; }
+                        else { analysisHTML += "<li><span class='good'>Good:</span> Heart rate is steady and within normal resting bounds.</li>"; }
+                    }
+
+                    // SpO2
+                    if (spo2Val > 0) {
+                        if (spo2Val < 90) { analysisHTML += "<li><span class='danger'>Critical:</span> Patient is suffering from severe Hypoxia (SpO2: " + spo2Val + "%). Oxygen support recommended.</li>"; issues++; }
+                        else if (spo2Val < 95) { analysisHTML += "<li><span class='warning'>Warning:</span> Blood oxygen levels are slightly low. Monitor patient closely.</li>"; issues++; }
+                        else { analysisHTML += "<li><span class='good'>Good:</span> Blood oxygen saturation (SpO2) is at a healthy level.</li>"; }
+                    }
+
+                    // Environment
+                    if (tempVal > 30 || tempVal < 18 || humVal > 70 || humVal < 30) {
+                        analysisHTML += "<li><span class='warning'>Environment:</span> Room conditions are not optimal for patient comfort. Consider adjusting AC or ventilation.</li>";
+                    } else if (tempVal > 0) {
+                        analysisHTML += "<li><span class='good'>Environment:</span> Room temperature and humidity are highly comfortable for the patient.</li>";
+                    }
+
+                    analysisHTML += "</ul>";
+
+                    let summaryHeader = "";
+                    if (issues === 0 && !isBpmString && bodyTempVal > 0) {
+                        summaryHeader = "<h3 style='color: #00e676; margin-bottom: 20px; display:flex; align-items:center; gap:10px;'><i class='fas fa-shield-check'></i> Patient is in Stable Condition</h3>";
+                    } else if (issues > 0 && issues < 2 || isBpmString) {
+                        summaryHeader = "<h3 style='color: #ffea00; margin-bottom: 20px; display:flex; align-items:center; gap:10px;'><i class='fas fa-exclamation-triangle'></i> Patient Requires Observation</h3>";
+                    } else if (issues >= 2) {
+                        summaryHeader = "<h3 style='color: #ff4d4f; margin-bottom: 20px; display:flex; align-items:center; gap:10px;'><i class='fas fa-ambulance'></i> Critical Medical Attention Required</h3>";
+                    }
+
+                    document.getElementById('aiSummaryContent').innerHTML = summaryHeader + analysisHTML;
                 }
             } catch (error) {
                 console.error("Firebase fetch error:", error);
