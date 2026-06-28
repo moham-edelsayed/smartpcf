@@ -269,6 +269,82 @@
         .ai-summary-content span.warning { color: #ffea00; font-weight: 800; }
         .ai-summary-content span.danger { color: #ff4d4f; font-weight: 800; }
 
+        /* Custom Power Switch */
+        .power-switch-container {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .power-switch-label {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #f8fafc;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .power-switch {
+            position: relative;
+            width: 100px;
+            height: 44px;
+            appearance: none;
+            -webkit-appearance: none;
+            background: rgba(255, 77, 79, 0.15);
+            outline: none;
+            border-radius: 40px;
+            border: 2px solid #ff4d4f;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 0 15px rgba(255, 77, 79, 0.3);
+            pointer-events: none; /* Make it read-only / auto indicator */
+            transition: 0.4s;
+        }
+
+        .power-switch::before {
+            content: "OFF";
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ff4d4f;
+            font-weight: 900;
+            font-size: 0.9rem;
+            transition: 0.4s;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .power-switch::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: 4px;
+            width: 34px;
+            height: 34px;
+            background: #ff4d4f;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            transition: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .power-switch:checked {
+            background: rgba(0, 230, 118, 0.15);
+            border-color: #00e676;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 0 15px rgba(0, 230, 118, 0.3);
+        }
+
+        .power-switch:checked::before {
+            content: "ON";
+            left: 22px;
+            right: auto;
+            color: #00e676;
+        }
+
+        .power-switch:checked::after {
+            left: calc(100% - 38px);
+            background: #00e676;
+        }
+
         footer { display: none; }
     </style>
 </head>
@@ -305,6 +381,12 @@
                             Real-time AI-Powered Patient Analytics Dashboard
                         </div>
                     </div>
+                </div>
+
+                <!-- System Power Switch -->
+                <div class="power-switch-container">
+                    <div class="power-switch-label">System Power</div>
+                    <input type="checkbox" class="power-switch" id="systemPowerSwitch" checked>
                 </div>
             </div>
 
@@ -523,6 +605,9 @@
                         document.querySelector('.status-badge').style.color = '#ff4d4f';
                         document.querySelector('.status-badge').style.borderColor = 'rgba(255, 77, 79, 0.3)';
                         document.querySelector('.status-badge').style.boxShadow = 'none';
+                        
+                        // Auto-turn OFF switch
+                        document.getElementById('systemPowerSwitch').checked = false;
 
                     } else {
                         // Sensor is ONLINE
@@ -541,6 +626,9 @@
                         document.querySelector('.status-badge').style.background = 'rgba(0, 230, 118, 0.1)';
                         document.querySelector('.status-badge').style.color = '#00e676';
                         document.querySelector('.status-badge').style.borderColor = 'rgba(0, 230, 118, 0.3)';
+                        
+                        // Auto-turn ON switch
+                        document.getElementById('systemPowerSwitch').checked = true;
                     }
 
                     // --- Auto-Simulate Missing Sensors (SpO2 & BPM) based on Body Temp ---
