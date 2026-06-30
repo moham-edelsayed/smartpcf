@@ -5,9 +5,436 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart IoT Healthcare System - Booklet</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <style>
+        /* Apple/Notion SaaS Premium Styling */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+        }
+
+        .booklet-section {
+            padding-top: 150px;
+            padding-bottom: 100px;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle Medical/Tech Background Elements */
+        .bg-elements {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .bg-grid {
+            position: absolute;
+            width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.5;
+        }
+        .bg-glow-1 {
+            position: absolute;
+            top: -10%; left: -10%;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(0,242,254,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(60px);
+        }
+        .bg-glow-2 {
+            position: absolute;
+            bottom: -10%; right: -5%;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(29, 78, 216, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+        }
+
+        .premium-container {
+            display: flex;
+            gap: 80px;
+            max-width: 1300px;
+            margin: 0 auto;
+            align-items: flex-start;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Left Column: 3D Book & Buttons */
+        .left-col {
+            flex: 0.8;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            position: sticky;
+            top: 120px;
+            animation: slideUp 1s ease forwards;
+        }
+
+        .book-3d-container {
+            perspective: 1200px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .book-3d {
+            width: 320px;
+            height: 450px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: floating 5s ease-in-out infinite;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            cursor: pointer;
+        }
+
+        .book-3d:hover {
+            transform: scale(1.05) rotateY(-8deg) rotateX(4deg);
+        }
+
+        .book-cover {
+            position: absolute;
+            width: 100%; height: 100%;
+            background: #fff;
+            border-radius: 8px 15px 15px 8px;
+            box-shadow: inset 4px 0 10px rgba(0,0,0,0.1), 
+                        20px 20px 40px rgba(0,0,0,0.5),
+                        0 0 25px rgba(0, 242, 254, 0.15);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            z-index: 2;
+        }
+
+        .book-cover canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Loading state for canvas */
+        .pdf-loading {
+            position: absolute;
+            color: #0a0f1e;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .book-spine {
+            position: absolute;
+            width: 30px; height: 98%;
+            background: #e5e7eb;
+            left: -15px; top: 1%;
+            transform: rotateY(-90deg);
+            transform-origin: right;
+            border-radius: 8px 0 0 8px;
+            border-left: 2px solid #ccc;
+        }
+
+        .book-pages {
+            position: absolute;
+            width: 96%; height: 96%;
+            background: #f9fafb;
+            right: -8px; top: 2%;
+            transform: translateZ(-20px);
+            border-radius: 8px 12px 12px 8px;
+            box-shadow: inset -3px 0 8px rgba(0,0,0,0.05);
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        .btn-large {
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #000;
+            font-weight: 700;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 242, 254, 0.2);
+            text-decoration: none;
+        }
+
+        .btn-large:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(0, 242, 254, 0.4);
+        }
+
+        .btn-secondary {
+            padding: 14px 20px;
+            font-size: 1rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 242, 254, 0.1);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Right Column: Info & Timeline */
+        .right-col {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            animation: fadeIn 1s ease forwards;
+            animation-delay: 0.2s;
+            opacity: 0;
+        }
+
+        .header-section h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+        }
+
+        .header-section p {
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            line-height: 1.7;
+            margin-bottom: 25px;
+            max-width: 600px;
+        }
+
+        .chips-container {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .chip {
+            background: rgba(0, 242, 254, 0.05);
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Timeline / Modern Cards */
+        .content-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .timeline-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 18px;
+            padding: 25px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timeline-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 4px;
+            background: var(--primary);
+            opacity: 0;
+            transition: 0.3s ease;
+        }
+
+        .timeline-card:hover {
+            background: rgba(0, 242, 254, 0.03);
+            border-color: rgba(0, 242, 254, 0.2);
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .timeline-card:hover::before { opacity: 1; }
+
+        .timeline-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background: rgba(0, 242, 254, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            color: var(--primary);
+            flex-shrink: 0;
+            box-shadow: inset 0 0 10px rgba(0, 242, 254, 0.1);
+        }
+
+        .timeline-text h3 {
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .timeline-text p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Modal PDF Viewer */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(4, 8, 20, 0.95);
+            backdrop-filter: blur(15px);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            width: 95%;
+            height: 90vh;
+            background: #111;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 50px rgba(0, 242, 254, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: scale(0.95) translateY(20px);
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .modal-title i { color: var(--primary); }
+
+        .close-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+            transition: 0.3s;
+        }
+        .close-btn:hover {
+            background: #ef4444;
+            transform: rotate(90deg);
+        }
+
+        .pdf-frame {
+            flex: 1;
+            width: 100%;
+            border: none;
+            background: #e5e7eb; /* Typical PDF viewer background */
+        }
+
+        /* Animations */
+        @keyframes floating {
+            0%, 100% { transform: translateY(0) rotateY(-5deg) rotateX(2deg); }
+            50% { transform: translateY(-15px) rotateY(-5deg) rotateX(2deg); }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 992px) {
+            .premium-container {
+                flex-direction: column;
+                gap: 50px;
+            }
+            .left-col {
+                position: relative;
+                top: 0;
+                width: 100%;
+                align-items: center;
+            }
+            .header-section h1 { font-size: 2.8rem; }
+            .timeline-card:hover { transform: translateY(-5px); }
+        }
+    </style>
 </head>
 
 <body>
@@ -18,7 +445,6 @@
             <li><a href="team.html">Team</a></li>
             <li><a href="components.html">Components</a></li>
             <li><a href="booklet.html" class="active">Booklet</a></li>
-            <li><a href="dashboard.html">Live Data</a></li>
             <li><a href="contact.html">Contact</a></li>
         </ul>
         <div class="hamburger">
@@ -26,61 +452,185 @@
         </div>
     </nav>
 
-    <section id="booklet" class="booklet page-section">
-        <div class="booklet-container">
-            <div class="booklet-image">
-                <div class="book-mockup">
-                    <div class="book-cover">
-                        <i class="fas fa-microscope icon-top"></i>
-                        <h3>Plasmonic PCF Sensors</h3>
-                        <p>Project Documentation & Research</p>
-                        <div class="book-bottom">
-                            <span>Smart IoT Health</span>
+    <section class="booklet-section">
+        <!-- Medical/Tech Background -->
+        <div class="bg-elements">
+            <div class="bg-grid"></div>
+            <div class="bg-glow-1"></div>
+            <div class="bg-glow-2"></div>
+        </div>
+
+        <div class="premium-container">
+            <!-- Left Column: 3D Book & Actions -->
+            <div class="left-col">
+                <div class="book-3d-container">
+                    <div class="book-3d" onclick="openPdfModal()">
+                        <div class="book-spine"></div>
+                        <div class="book-pages"></div>
+                        <div class="book-cover">
+                            <div class="pdf-loading" id="pdfLoader">
+                                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+                                <span>Loading Preview...</span>
+                            </div>
+                            <canvas id="pdfPreviewCanvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-large" onclick="openPdfModal()">
+                        <i class="fas fa-book-reader"></i> Open Interactive Booklet
+                    </button>
+                    <a href="assets/docs/booklet.pdf" class="btn-secondary" download>
+                        <i class="fas fa-cloud-download-alt"></i> Download PDF
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Column: Info & Timeline -->
+            <div class="right-col">
+                <div class="header-section">
+                    <h1>Project Booklet</h1>
+                    <p>Explore the full technical documentation, architecture, and clinical outcomes of the Smart IoT-Based Healthcare System designed for early disease detection using Plasmonic PCF Sensors.</p>
+                    
+                    <div class="chips-container">
+                        <div class="chip"><i class="fas fa-file-pdf"></i> Format: PDF</div>
+                        <div class="chip"><i class="fas fa-layer-group"></i> 25 Pages</div>
+                        <div class="chip"><i class="fas fa-code-branch"></i> Version 1.0</div>
+                        <div class="chip"><i class="fas fa-calendar-check"></i> Updated 2025</div>
+                    </div>
+                </div>
+
+                <div class="content-timeline">
+                    <!-- Card 1 -->
+                    <div class="timeline-card">
+                        <div class="timeline-icon"><i class="fas fa-compress-arrows-alt"></i></div>
+                        <div class="timeline-text">
+                            <h3>Abstract</h3>
+                            <p>An overarching summary of the integration between highly sensitive Plasmonic PCF sensors and robust IoT cloud architectures to facilitate non-invasive diagnostics.</p>
+                        </div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="timeline-card">
+                        <div class="timeline-icon"><i class="fas fa-bullseye"></i></div>
+                        <div class="timeline-text">
+                            <h3>Objectives</h3>
+                            <p>Detailed goals focusing on achieving high sensitivity, lowering latency in IoT data transmission, and providing a scalable solution for modern hospitals.</p>
+                        </div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="timeline-card">
+                        <div class="timeline-icon"><i class="fas fa-microscope"></i></div>
+                        <div class="timeline-text">
+                            <h3>Methodology</h3>
+                            <p>In-depth look at the sensor's cross-sectional design, fabrication constraints, and the DevOps pipeline driving the cloud processing unit.</p>
+                        </div>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="timeline-card">
+                        <div class="timeline-icon"><i class="fas fa-chart-pie"></i></div>
+                        <div class="timeline-text">
+                            <h3>Results</h3>
+                            <p>Analysis of the generated mode fields, confinement loss metrics, and the speed of the IoT gateway response under heavy loads.</p>
+                        </div>
+                    </div>
+                    <!-- Card 5 -->
+                    <div class="timeline-card">
+                        <div class="timeline-icon"><i class="fas fa-briefcase-medical"></i></div>
+                        <div class="timeline-text">
+                            <h3>Applications</h3>
+                            <p>Real-world implementation scenarios in ICUs, remote patient monitoring, and early viral outbreak tracking.</p>
+                        </div>
+                    </div>
+                    <!-- Card 6 -->
+                    <div class="timeline-card">
+                        <div class="timeline-icon"><i class="fas fa-book"></i></div>
+                        <div class="timeline-text">
+                            <h3>References</h3>
+                            <p>Comprehensive citations of related biomedical optics research, IoT standards, and previous literature on PCF technologies.</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="booklet-info">
-                <h2>Project <span>Booklet</span></h2>
-                <p>Dive deep into the technical specifications, research methodologies, and clinical potential of our Plasmonic PCF Sensors integrated with IoT networks.</p>
-                
-                <!-- Abstract Card -->
-                <div class="abstract-card">
-                    <h4><i class="fas fa-file-alt" style="color: var(--primary); margin-right: 8px;"></i> Project Abstract</h4>
-                    <p>This project introduces a highly sensitive, non-invasive Photonic Crystal Fiber (PCF) sensor integrated with IoT. It resolves the delays and complexity of traditional blood tests by providing real-time, highly accurate early disease detection directly to a hospital dashboard.</p>
-                </div>
-
-                <!-- Key Metrics -->
-                <h4 style="color: var(--text-main); margin-bottom: 15px; font-size: 1.1rem;">Key Metrics & Results</h4>
-                <div class="metrics-grid">
-                    <div class="metric-box">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <div class="metric-val">Ultra-High</div>
-                        <div class="metric-label">Sensitivity</div>
-                    </div>
-                    <div class="metric-box">
-                        <i class="fas fa-wifi"></i>
-                        <div class="metric-val">Real-Time</div>
-                        <div class="metric-label">IoT Sync</div>
-                    </div>
-                    <div class="metric-box">
-                        <i class="fas fa-microscope"></i>
-                        <div class="metric-val">Nanoscale</div>
-                        <div class="metric-label">Precision</div>
-                    </div>
-                </div>
-
-                <a href="assets/docs/booklet.pdf" class="btn btn-primary" style="margin-top: 15px;" download><i class="fas fa-download"></i>
-                    Download Full Booklet (PDF)</a>
-            </div>
         </div>
     </section>
 
-    <footer>
-        <p>&copy; 2024 Smart IoT Healthcare System. All Rights Reserved.</p>
-    </footer>
+    <!-- Interactive PDF Modal -->
+    <div class="modal-overlay" id="pdfModalOverlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-file-pdf"></i> Smart_IoT_Healthcare_Booklet.pdf
+                </div>
+                <button class="close-btn" onclick="closePdfModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- Using embedded PDF viewer with toolbar=1 for native controls -->
+            <iframe class="pdf-frame" id="pdfIframe" src="" title="PDF Viewer"></iframe>
+        </div>
+    </div>
 
     <script src="assets/js/script.js"></script>
+    <script>
+        // Setup PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+        const pdfUrl = 'assets/docs/booklet.pdf';
+
+        // 1. Render First Page as Cover Preview
+        const canvas = document.getElementById('pdfPreviewCanvas');
+        const ctx = canvas.getContext('2d');
+        const loader = document.getElementById('pdfLoader');
+
+        pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+            // Fetch the first page
+            return pdf.getPage(1);
+        }).then(page => {
+            const viewport = page.getViewport({ scale: 1.5 });
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            const renderContext = {
+                canvasContext: ctx,
+                viewport: viewport
+            };
+            
+            page.render(renderContext).promise.then(() => {
+                // Hide loader once rendered
+                loader.style.display = 'none';
+            });
+        }).catch(err => {
+            console.error('Error rendering PDF preview:', err);
+            loader.innerHTML = '<i class="fas fa-exclamation-triangle" style="color:red; font-size: 2rem;"></i><span style="color:#000;">Preview Unavailable</span>';
+        });
+
+        // 2. Modal Functions
+        const modalOverlay = document.getElementById('pdfModalOverlay');
+        const pdfIframe = document.getElementById('pdfIframe');
+
+        function openPdfModal() {
+            modalOverlay.classList.add('active');
+            // Add #toolbar=1 to ensure the native PDF controls (zoom, print, save) are visible
+            pdfIframe.src = pdfUrl + '#toolbar=1&view=FitH';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePdfModal() {
+            modalOverlay.classList.remove('active');
+            setTimeout(() => {
+                pdfIframe.src = ''; // clear iframe to save memory
+            }, 400);
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside content
+        modalOverlay.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePdfModal();
+            }
+        });
+    </script>
 </body>
 
 </html>

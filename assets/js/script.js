@@ -100,3 +100,34 @@ const watermark = document.createElement('div');
 watermark.className = 'site-watermark';
 watermark.innerHTML = '<div class="watermark-content"><i class="fas fa-code"></i><div class="text-group"><span>Developed By</span><strong>Mohamed Elsayed</strong></div></div>';
 document.body.appendChild(watermark);
+
+// Speech Synthesis for Team Members (Arabic Name on Hover)
+const teamImages = document.querySelectorAll('.team-card img');
+if (teamImages.length > 0) {
+    teamImages.forEach(img => {
+        img.addEventListener('mouseenter', () => {
+            const title = img.getAttribute('title');
+            if (title && title.includes('-')) {
+                // Extract the Arabic name
+                const arabicName = title.split('-')[1].trim();
+                
+                // Cancel any ongoing speech
+                if (window.speechSynthesis.speaking) {
+                    window.speechSynthesis.cancel();
+                }
+                
+                const utterance = new SpeechSynthesisUtterance(arabicName);
+                utterance.lang = 'ar-SA'; // Arabic language
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        });
+
+        // Optional: stop speaking when mouse leaves, but names are short enough
+        // img.addEventListener('mouseleave', () => {
+        //     if (window.speechSynthesis.speaking) {
+        //         window.speechSynthesis.cancel();
+        //     }
+        // });
+    });
+}
