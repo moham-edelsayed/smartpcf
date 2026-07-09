@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Smart IOT-based Healthcare System - Graduation Project Defense</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/night.min.css" id="theme">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .reveal {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+        }
+
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            font-family: 'Inter', sans-serif;
+            text-transform: none;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .reveal h2 { font-size: 2.2rem; }
+        .reveal h3 { font-size: 1.6rem; color: #e2e8f0; -webkit-text-fill-color: initial; background: none;}
+
+        .reveal p, .reveal li {
+            font-size: 1.4rem;
+            line-height: 1.5;
+            color: #cbd5e1;
+        }
+
+        .glass-box {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 242, 254, 0.15);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin: 15px auto;
+        }
+
+        .flex-row {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .flex-col {
+            flex: 1;
+            text-align: left;
+        }
+
+        .img-premium {
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 242, 254, 0.15);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            max-height: 350px;
+            object-fit: contain;
+            background: #fff;
+        }
+
+        .highlight {
+            color: #00f2fe;
+            font-weight: 600;
+        }
+
+        .students-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 1.1rem;
+            text-align: left;
+            margin-top: 15px;
+        }
+
+        table.custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.2rem;
+            color: #e2e8f0;
+        }
+        table.custom-table th {
+            background: rgba(0, 242, 254, 0.1);
+            color: #00f2fe;
+            padding: 10px;
+            border-bottom: 2px solid #00f2fe;
+        }
+        table.custom-table td {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        #print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            background: linear-gradient(135deg, #00f2fe, #4facfe);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.4);
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        #print-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.6);
+        }
+    </style>
+
+    <script>
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match( /print-pdf/gi ) ? 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/css/print/pdf.min.css' : 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/css/print/paper.min.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+</head>
+<body>
+
+    <a id="print-btn" href="?print-pdf" title="Click here then press Ctrl+P to save as PDF">
+        <i class="fas fa-print"></i> Print / Save PDF
+    </a>
+
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Title Slide -->
+            <section data-transition="zoom">
+                <div class="glass-box">
+                    <h2 style="font-size: 2.2rem; line-height: 1.2;">Smart IOT-based Healthcare System</h2>
+                    <h3 style="font-size: 1.3rem; color: #94a3b8;">For Early Disease Detection Using Plasmonic PCF-SPR Sensors</h3>
+                    <hr style="border-color: rgba(0, 242, 254, 0.2); margin: 15px 0;">
+                    
+                    <div class="students-grid">
+                        <div><i class="fas fa-user"></i> Mahfouz Nazih Mahfouz</div>
+                        <div><i class="fas fa-user"></i> Fares Mahmoud Eldahshory</div>
+                        <div><i class="fas fa-user"></i> Mohamed Ahmed Elmetwaly</div>
+                        <div><i class="fas fa-user"></i> Moamen Ibrahim Othman</div>
+                        <div><i class="fas fa-user"></i> Mohamed Abdelkader Hasabo</div>
+                        <div><i class="fas fa-user"></i> Mohamed Elsayed Elsaidy</div>
+                        <div><i class="fas fa-user"></i> Walaa Abdallah Elshamy</div>
+                        <div><i class="fas fa-user"></i> Abdallah Mohamed Naeem</div>
+                        <div><i class="fas fa-user"></i> Hanan Hussein Abdelazim</div>
+                        <div><i class="fas fa-user"></i> Fatma Hamdeen</div>
+                        <div style="grid-column: 1 / -1; text-align: center;"><i class="fas fa-user"></i> Esraa Ragab Mansour</div>
+                    </div>
+
+                    <div style="margin-top: 20px; font-size: 1.2rem; border-top: 1px solid rgba(0,242,254,0.2); padding-top: 15px;">
+                        <span class="highlight">Supervised By:</span> DR. Fatma Hashad & DR. Shaimaa Mamdouh<br>
+                        <span style="font-size: 0.9rem; color:#64748b;">Higher Institute of Engineering and Technology - Kafrelsheikh | July 2026</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Abstract -->
+            <section data-transition="slide">
+                <h2>Abstract</h2>
+                <div class="glass-box">
+                    <p>We propose a modified <span class="highlight">Photonic Crystal Fiber–Surface Plasmon Resonance (PCF-SPR)</span> biosensor for highly sensitive refractive index sensing and biomedical applications.</p>
+                    <ul>
+                        <li>Redesigned conventional Dual-Side Polished PCF into a <span class="highlight">circular structure</span> for enhanced light confinement.</li>
+                        <li>Utilizes <span class="highlight">Gold (Au)</span> as the plasmonic material for surface plasmon waves.</li>
+                        <li>Numerically analyzed using <span class="highlight">Finite Element Method (FEM)</span> via COMSOL Multiphysics.</li>
+                        <li>Optimized using <span class="highlight">AI and Machine Learning</span> (Genetic Algorithms).</li>
+                        <li>Achieved a maximum wavelength sensitivity of <span class="highlight">8000 nm/RIU</span> and resolution of 1.9 × 10⁻⁵ RIU.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Objectives -->
+            <section data-transition="fade">
+                <h2>Project Objectives</h2>
+                <div class="glass-box" style="text-align: left;">
+                    <ul>
+                        <li><i class="fas fa-check-circle highlight"></i> Design a high-performance PCF-SPR biosensor.</li>
+                        <li><i class="fas fa-check-circle highlight"></i> Analyze optical characteristics using FEM (COMSOL).</li>
+                        <li><i class="fas fa-check-circle highlight"></i> Investigate the effects of air-hole diameter, pitch, and gold layer thickness.</li>
+                        <li><i class="fas fa-check-circle highlight"></i> Optimize design using Artificial Intelligence (ML & GA).</li>
+                        <li><i class="fas fa-check-circle highlight"></i> Develop a practical <span class="highlight">IoT-based healthcare monitoring system</span> using ESP32 and biomedical sensors.</li>
+                        <li><i class="fas fa-check-circle highlight"></i> Implement real-time data transmission and visualization using Blynk & Firebase.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Chapter 1: Introduction -->
+            <section>
+                <section data-transition="slide">
+                    <h2 style="font-size: 3rem;">Chapter 1</h2>
+                    <h3>Introduction & Background</h3>
+                </section>
+                <section data-transition="slide">
+                    <h2>Optical Sensors vs Conventional</h2>
+                    <div class="flex-row">
+                        <div class="flex-col glass-box">
+                            <h3>Limitations of Conventional</h3>
+                            <ul style="font-size: 1.2rem;">
+                                <li>Low sensitivity to small biological changes.</li>
+                                <li>Bulky systems, increasing cost.</li>
+                                <li>Affected by electromagnetic interference (EMI).</li>
+                                <li>Limited real-time monitoring.</li>
+                            </ul>
+                        </div>
+                        <div class="flex-col glass-box">
+                            <h3>Optical Sensing Advantages</h3>
+                            <ul style="font-size: 1.2rem;">
+                                <li>High sensitivity and fast response.</li>
+                                <li>Immunity to EMI.</li>
+                                <li>Label-free detection.</li>
+                                <li>Enables advanced techniques like SPR and PCF.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                <section data-transition="slide">
+                    <h2>Surface Plasmon Resonance (SPR)</h2>
+                    <div class="glass-box">
+                        <p>SPR is an optical phenomenon at a <span class="highlight">metal–dielectric interface</span> where incident light interacts with free electrons.</p>
+                        <ul>
+                            <li>Extremely sensitive to <span class="highlight">Refractive Index (RI)</span> variations near the metal surface.</li>
+                            <li>Allows for real-time, label-free detection of chemical and biological substances.</li>
+                            <li>The binding of an analyte modifies the local RI, resulting in a measurable shift in the resonance angle or wavelength.</li>
+                        </ul>
+                    </div>
+                </section>
+                <section data-transition="slide">
+                    <h2>Photonic Crystal Fiber (PCF)</h2>
+                    <div class="flex-row">
+                        <div class="flex-col glass-box">
+                            <p>PCFs are optical fibers with a periodic arrangement of air holes.</p>
+                            <ul>
+                                <li>Precise control of light confinement and dispersion.</li>
+                                <li>PCF-SPR sensors integrate PCF structures with SPR to achieve highly sensitive RI detection.</li>
+                                <li>Engineered air-hole geometries enhance evanescent field interaction.</li>
+                            </ul>
+                        </div>
+                        <div class="flex-col">
+                            <img src="assets/img/pcf-mode1.jpg" alt="PCF" class="img-premium">
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Chapter 2: Literature Review -->
+            <section>
+                <section data-transition="slide">
+                    <h2 style="font-size: 3rem;">Chapter 2</h2>
+                    <h3>Literature Review</h3>
+                </section>
+                <section data-transition="slide">
+                    <h2>Evolution of SPR Sensors</h2>
+                    <div class="glass-box">
+                        <ul>
+                            <li><strong>Conventional Systems:</strong> Prism-coupled (Kretschmann arrangement), bulky, sensitive to mechanical vibrations.</li>
+                            <li><strong>Fiber-Based Sensors:</strong> Compact, flexible, capable of remote sensing.</li>
+                            <li><strong>PCF-SPR Sensors:</strong> Introduced microstructured geometry for stronger light confinement and enhanced evanescent field interaction.</li>
+                        </ul>
+                    </div>
+                </section>
+                <section data-transition="slide">
+                    <h2>Comparison with Previous Works</h2>
+                    <div class="glass-box">
+                        <table class="custom-table">
+                            <tr>
+                                <th>Ref</th>
+                                <th>Core Type</th>
+                                <th>Sensitivity (nm/RIU)</th>
+                                <th>Fabrication Complexity</th>
+                            </tr>
+                            <tr>
+                                <td>[24] 2023</td>
+                                <td>Single-core</td>
+                                <td>47,000</td>
+                                <td>High</td>
+                            </tr>
+                            <tr>
+                                <td>[26] 2021</td>
+                                <td>Single-core (D-shaped)</td>
+                                <td>3,340</td>
+                                <td>Medium</td>
+                            </tr>
+                            <tr>
+                                <td>[34] 2023</td>
+                                <td>Multicore (Dual-side)</td>
+                                <td>5,000</td>
+                                <td>Low-Medium</td>
+                            </tr>
+                            <tr style="background: rgba(0, 242, 254, 0.1);">
+                                <td><strong>Proposed (Optimized)</strong></td>
+                                <td><strong>Circular</strong></td>
+                                <td><strong>8,000</strong></td>
+                                <td><strong>Medium</strong></td>
+                            </tr>
+                        </table>
+                        <p style="font-size: 1.1rem; margin-top: 15px;">Our design achieves a balance between competitive sensitivity, practical feasibility, and a wide sensing range.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Chapter 3: Design & Simulation -->
+            <section>
+                <section data-transition="slide">
+                    <h2 style="font-size: 3rem;">Chapter 3</h2>
+                    <h3>Design, Simulation, and Performance Analysis</h3>
+                </section>
+                <section data-transition="slide">
+                    <h2>Proposed Sensor Geometry</h2>
+                    <div class="flex-row">
+                        <div class="flex-col glass-box">
+                            <ul style="font-size: 1.2rem;">
+                                <li><strong>Structure:</strong> 15 air holes arranged in a circular symmetric pattern.</li>
+                                <li><strong>Core:</strong> Solid silica core.</li>
+                                <li><strong>Plasmonic Layer:</strong> Thin gold (Au) layer deposited on the inner surface.</li>
+                                <li><strong>Analyte:</strong> Placed directly adjacent to the gold layer.</li>
+                            </ul>
+                            <p style="font-size: 1.1rem; color: #94a3b8;">This circular geometry enhances the symmetry of the field distribution and increases interaction between light and the analyte compared to the original dual-core design.</p>
+                        </div>
+                        <div class="flex-col">
+                            <img src="assets/img/pcf-mode2.jpg" alt="Sensor Geometry" class="img-premium">
+                        </div>
+                    </div>
+                </section>
+                <section data-transition="slide">
+                    <h2>Numerical Analysis (FEM)</h2>
+                    <div class="glass-box">
+                        <p>Simulations performed using <strong>COMSOL Multiphysics</strong> with the Finite Element Method (FEM).</p>
+                        <ul>
+                            <li><strong>Confinement Loss:</strong> Calculated from the imaginary part of the effective refractive index.</li>
+                            <li><strong>Wavelength Sensitivity:</strong> Defined as the shift in resonance wavelength per RIU change. <br><span style="font-family: monospace; color: #00f2fe;">S_λ = Δλ_peak / Δn_a</span></li>
+                            <li><strong>Figure of Merit (FOM):</strong> Ratio of sensitivity to Full Width at Half Maximum (FWHM).</li>
+                        </ul>
+                    </div>
+                </section>
+                <section data-transition="slide">
+                    <h2>Phase Matching & Resonance</h2>
+                    <div class="glass-box">
+                        <p>Resonance occurs when the propagation constant of the <span class="highlight">guided core mode</span> matches the <span class="highlight">surface plasmon polariton (SPP) mode</span>.</p>
+                        <ul>
+                            <li>At resonance, optical power transfers from the core to the plasmonic mode.</li>
+                            <li>This creates a sharp peak in confinement loss.</li>
+                            <li>As analyte RI increases, the resonance peak shifts toward longer wavelengths (<span class="highlight">red shift</span>).</li>
+                        </ul>
+                    </div>
+                </section>
+                <section data-transition="slide">
+                    <h2>Machine Learning Optimization</h2>
+                    <div class="glass-box">
+                        <p>AI techniques were employed to bypass repeated, time-consuming FEM simulations.</p>
+                        <ul>
+                            <li><strong>Dataset:</strong> Generated by varying gold thickness, air-hole diameter, pitch, and analyte RI.</li>
+                            <li><strong>Model Performance:</strong> Achieved a coefficient of determination (R²) of <span class="highlight">0.896</span>.</li>
+                            <li><strong>Optimized Parameters:</strong> Gold Thickness = 40 nm, Air Hole Diameter = 850 nm, Pitch = 2 μm.</li>
+                        </ul>
+                    </div>
+                </section>
+                <section data-transition="slide">
+                    <h2>Performance Results</h2>
+                    <div class="glass-box">
+                        <table class="custom-table">
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Original Design</th>
+                                <th>Improved Design</th>
+                            </tr>
+                            <tr>
+                                <td>Sensitivity</td>
+                                <td>5000 nm/RIU</td>
+                                <td><strong class="highlight">8000 nm/RIU</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Confinement Loss</td>
+                                <td>550 dB/cm</td>
+                                <td>1000 dB/cm</td>
+                            </tr>
+                            <tr>
+                                <td>Figure of Merit</td>
+                                <td>48 RIU⁻¹</td>
+                                <td><strong class="highlight">75 RIU⁻¹</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Field Distribution</td>
+                                <td>Partially confined</td>
+                                <td>Enhanced symmetry</td>
+                            </tr>
+                        </table>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Chapter 4: IoT System -->
+            <section>
+                <section data-transition="slide">
+                    <h2 style="font-size: 3rem;">Chapter 4</h2>
+                    <h3>Practical IoT Healthcare System</h3>
+                </section>
+                <section data-transition="slide">
+                    <h2>Why an IoT Alternative?</h2>
+                    <div class="glass-box">
+                        <p>While PCF-SPR sensors offer extreme sensitivity, their practical implementation faces challenges:</p>
+                        <ul>
+                            <li>Complex fabrication of photonic crystals.</li>
+                            <li>High cost of optical components & spectrometers.</li>
+                            <li>Requires specialized lab environments.</li>
+                        </ul>
+                        <p style="margin-top: 15px;"><span class="highlight">Solution:</span> We developed a low-cost, real-time IoT healthcare monitoring system as a practical proof-of-concept.</p>
+                    </div>
+                </section>
+                <section data-transition="slide">
+                    <h2>Hardware Components</h2>
+                    <div class="flex-row">
+                        <div class="flex-col glass-box">
+                            <ul style="font-size: 1.2rem;">
+                                <li><strong>ESP32:</strong> Main microcontroller with built-in Wi-Fi.</li>
+                                <li><strong>MAX30102:</strong> Measures Heart Rate (BPM) and Blood Oxygen (SpO₂).</li>
+                                <li><strong>DHT11:</strong> Measures ambient temperature & humidity.</li>
+                                <li><strong>DS18B20:</strong> High-accuracy body temperature sensor.</li>
+                            </ul>
+                        </div>
+                        <div class="flex-col">
+                            <img src="assets/img/iot-workflow.jpg" alt="Hardware" class="img-premium">
+                        </div>
+                    </div>
+                </section>
+                <section data-transition="slide">
+                    <h2>Cloud Communication Architecture</h2>
+                    <div class="glass-box">
+                        <ul>
+                            <li><strong>Data Acquisition:</strong> Sensors read physiological data.</li>
+                            <li><strong>Processing:</strong> ESP32 digitizes and formats the data.</li>
+                            <li><strong>Cloud Database:</strong> Data is transmitted securely via Wi-Fi to <span class="highlight">Firebase Realtime Database</span>.</li>
+                            <li><strong>Visualization:</strong> Displayed instantly on the <span class="highlight">Blynk</span> mobile app and our custom web dashboard.</li>
+                        </ul>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Chapter 5: Website -->
+            <section>
+                <section data-transition="slide">
+                    <h2 style="font-size: 3rem;">Chapter 5</h2>
+                    <h3>Website Design and Development</h3>
+                </section>
+                <section data-transition="slide">
+                    <h2>The Digital Interface</h2>
+                    <div class="flex-row">
+                        <div class="flex-col glass-box">
+                            <p>Developed using HTML5, CSS3, and modern ES6 JavaScript.</p>
+                            <ul style="font-size: 1.2rem;">
+                                <li><strong>Live Data Dashboard:</strong> Pulls real-time data from Firebase to display HR, SpO₂, and Temperature.</li>
+                                <li><strong>AI Diagnostic Report:</strong> Simple logic to alert users of abnormal vitals.</li>
+                                <li><strong>Project Booklet:</strong> Hosted digitally for paperless access.</li>
+                                <li><strong>Accessibility:</strong> Implemented Speech Synthesis API on the team page.</li>
+                            </ul>
+                        </div>
+                        <div class="flex-col">
+                            <img src="assets/img/system-in-action.png" alt="Website UI" class="img-premium">
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Chapter 6: Conclusion -->
+            <section>
+                <section data-transition="slide">
+                    <h2 style="font-size: 3rem;">Chapter 6</h2>
+                    <h3>Challenges, Conclusion & Future Work</h3>
+                </section>
+                <section data-transition="slide">
+                    <h2>Conclusion</h2>
+                    <div class="glass-box">
+                        <ul>
+                            <li>Successfully designed an optimized <span class="highlight">circular PCF-SPR biosensor</span> achieving 8000 nm/RIU sensitivity.</li>
+                            <li>Demonstrated the power of <span class="highlight">Machine Learning</span> in bypassing expensive FEM simulations.</li>
+                            <li>Bridged the gap between theory and practice by building a fully functional <span class="highlight">IoT Healthcare Monitoring System</span>.</li>
+                            <li>Created a comprehensive web platform for real-time visualization and remote monitoring.</li>
+                        </ul>
+                    </div>
+                </section>
+                <section data-transition="slide">
+                    <h2>Future Work</h2>
+                    <div class="glass-box">
+                        <ul>
+                            <li><strong>Fabrication:</strong> Experimental validation of the proposed PCF-SPR sensor in a lab setting.</li>
+                            <li><strong>Materials:</strong> Explore alternative plasmonic materials like Graphene or Silver (Ag).</li>
+                            <li><strong>IoT Expansion:</strong> Integrate advanced sensors (ECG, Blood Glucose) and deploy on enterprise clouds like AWS IoT.</li>
+                            <li><strong>AI Integration:</strong> Implement Deep Learning for predictive disease analysis directly on the edge devices.</li>
+                        </ul>
+                    </div>
+                </section>
+            </section>
+
+            <section data-transition="zoom">
+                <div class="glass-box" style="text-align: center;">
+                    <h2 style="font-size: 4rem;">Thank You!</h2>
+                    <p style="font-size: 1.8rem; color: #00f2fe;">We are ready for your questions.</p>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            controls: true,
+            progress: true,
+            center: true,
+            transition: 'slide'
+        });
+        
+        // Hide print button when printing
+        if (window.location.search.match(/print-pdf/gi)) {
+            document.getElementById('print-btn').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
