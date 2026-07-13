@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Slide Logo Fixer</title>
+    <style>
+        body { background: #0f172a; color: white; font-family: 'Segoe UI', Tahoma, sans-serif; text-align: center; padding: 20px; }
+        .upload-container { display: flex; flex-direction: column; gap: 15px; align-items: center; background: #1e293b; padding: 20px; border-radius: 10px; max-width: 500px; margin: 0 auto 20px; border: 1px solid #333; }
+        .upload-row { display: flex; justify-content: space-between; width: 100%; align-items: center; }
+        label { font-weight: bold; color: #00f2fe; }
+        input[type="file"] { background: #334155; padding: 5px; border-radius: 5px; color: white; }
+        canvas { max-width: 90%; border: 2px solid #00f2fe; border-radius: 10px; margin-top: 10px; box-shadow: 0 10px 30px rgba(0,242,254,0.2); }
+        button { padding: 15px 30px; font-size: 1.2rem; background: linear-gradient(135deg, #00f2fe, #38bdf8); color: #000; border: none; cursor: pointer; border-radius: 8px; font-weight: bold; margin-top: 10px; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,242,254,0.4); display: none; }
+        button:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,242,254,0.6); }
+        #status { color: #facc15; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+    <h2>أداة تعديل السلايد (إصدار الوضوح العالي) 🖼️</h2>
+    <p style="color: #94a3b8; font-size: 0.9rem;">قمت بتغيير الطريقة ليتم وضع اللوجوهات داخل إطار أبيض أنيق ليكون الكلام الأسود واضحاً جداً على الخلفية الغامقة.</p>
+    
+    <div class="upload-container">
+        <div class="upload-row">
+            <label>1. السلايد الأساسي (main_slide.jpg):</label>
+            <input type="file" id="upSlide" accept="image/*">
+        </div>
+        <div class="upload-row">
+            <label>2. لوجو المعهد (logo1.jpg):</label>
+            <input type="file" id="upLogo1" accept="image/*">
+        </div>
+        <div class="upload-row">
+            <label>3. لوجو الوزارة (logo2.jpg):</label>
+            <input type="file" id="upLogo2" accept="image/*">
+        </div>
+    </div>
+
+    <p id="status">في انتظار رفع الصور الثلاثة...</p>
+    <button id="downloadBtn">⬇️ تحميل السلايد النهائي الجاهز</button>
+    <br>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const btn = document.getElementById('downloadBtn');
+        const statusText = document.getElementById('status');
+
+        let baseImg = new Image();
+        let logo1 = new Image();
+        let logo2 = new Image();
+
+        let loadedCount = 0;
+
+        function checkReady() {
+            loadedCount++;
+            if(loadedCount === 3) {
+                statusText.innerText = "جاري الدمج... ⏳";
+                statusText.style.color = "#00f2fe";
+                setTimeout(processImages, 100);
+            }
+        }
+
+        // Handle file uploads
+        document.getElementById('upSlide').onchange = e => loadFile(e.target.files[0], baseImg);
+        document.getElementById('upLogo1').onchange = e => loadFile(e.target.files[0], logo1);
+        document.getElementById('upLogo2').onchange = e => loadFile(e.target.files[0], logo2);
+
+        function loadFile(file, imgObj) {
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = event => {
+                imgObj.onload = checkReady;
+                imgObj.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function processImages() {
+            try {
+                canvas.width = baseImg.width;
+                canvas.height = baseImg.height;
+                
+                // Enable high quality smoothing
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+
+                // Draw base
+                ctx.drawImage(baseImg, 0, 0);
+
+                // Get background color from top center
+                const bgData = ctx.getImageData(canvas.width / 2, 50, 1, 1).data;
+                const bgColor = `rgb(${bgData[0]}, ${bgData[1]}, ${bgData[2]})`;
+
+                // --- 1. HIGH QUALITY DOWNSCALING FUNCTION ---
+                function drawHQ(imgObj, dx, dy, dw, dh) {
+                    let tempCanvas = document.createElement('canvas');
+                    let tCtx = tempCanvas.getContext('2d');
+                    let cw = imgObj.width;
+                    let ch = imgObj.height;
+                    tempCanvas.width = cw;
+                    tempCanvas.height = ch;
+                    tCtx.drawImage(imgObj, 0, 0);
+                    
+                    // Step down by half iteratively for ultra-smooth anti-aliasing
+                    while (cw > dw * 2) {
+                        cw = Math.floor(cw / 2);
+                        ch = Math.floor(ch / 2);
+                        let stepCanvas = document.createElement('canvas');
+                        let sCtx = stepCanvas.getContext('2d');
+                        stepCanvas.width = cw;
+                        stepCanvas.height = ch;
+                        sCtx.imageSmoothingEnabled = true;
+                        sCtx.imageSmoothingQuality = 'high';
+                        sCtx.drawImage(tempCanvas, 0, 0, cw, ch);
+                        tempCanvas = stepCanvas;
+                    }
+                    ctx.drawImage(tempCanvas, 0, 0, cw, ch, dx, dy, dw, dh);
+                }
+
+                // --- 2. CALCULATE NEW SIZES ---
+                // We make them large enough to cover the old logos naturally (about 11% of width)
+                const targetW1 = canvas.width * 0.11;
+                const targetH1 = targetW1; 
+                
+                const targetW2 = canvas.width * 0.11;
+                const targetH2 = targetW2;
+
+                // Adjust padding so they cover the exact spot of the old logos
+                const newPadX = canvas.width * 0.035;
+                const newPadY = canvas.height * 0.03; 
+
+                const x1 = newPadX;
+                const y1 = newPadY;
+                const x2 = canvas.width - targetW2 - newPadX;
+                const y2 = newPadY;
+
+
+                // --- 3. DRAW LOGO 1 (INSTITUTE) as a CIRCLE ---
+                const cx1 = x1 + targetW1/2;
+                const cy1 = y1 + targetH1/2;
+                const r1 = targetW1/2;
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(cx1, cy1, r1, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.clip(); // Clip everything to this circle
+
+                ctx.fillStyle = "white"; // White background
+                ctx.fill();
+                // Draw logo 1 using High Quality Downscaling
+                drawHQ(logo1, x1, y1, targetW1, targetH1);
+                ctx.restore();
+
+                // Draw a nice golden border around Logo 1
+                ctx.beginPath();
+                ctx.arc(cx1, cy1, r1, 0, Math.PI * 2);
+                ctx.lineWidth = 6;
+                ctx.strokeStyle = "#f59e0b"; // Gold
+                ctx.stroke();
+
+
+                // --- 4. DRAW LOGO 2 (MINISTRY) as a CIRCLE ---
+                const cx2 = x2 + targetW2/2;
+                const cy2 = y2 + targetH2/2;
+                const r2 = targetW2/2;
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(cx2, cy2, r2, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.clip(); // Clip everything to this circle
+
+                ctx.fillStyle = "white"; // Solid white background for Ministry logo
+                ctx.fill();
+                // Draw logo 2 using High Quality Downscaling
+                drawHQ(logo2, x2, y2, targetW2, targetH2);
+                ctx.restore();
+
+                // Draw a subtle golden border around Logo 2
+                ctx.beginPath();
+                ctx.arc(cx2, cy2, r2, 0, Math.PI * 2);
+                ctx.lineWidth = 4;
+                ctx.strokeStyle = "#eab308"; // Gold to match the eagle
+                ctx.stroke();
+
+                statusText.innerText = "تم الدمج بنجاح وبأعلى وضوح! 🎉";
+                statusText.style.color = "#10b981";
+                btn.style.display = "inline-block";
+            } catch (err) {
+                statusText.innerText = "حدث خطأ: " + err.message;
+                statusText.style.color = "red";
+            }
+        }
+
+        btn.onclick = function() {
+            const link = document.createElement('a');
+            link.download = 'Final_Slide_Ultra_Clear.jpg';
+            link.href = canvas.toDataURL('image/jpeg', 1.0);
+            link.click();
+        }
+    </script>
+</body>
+</html>

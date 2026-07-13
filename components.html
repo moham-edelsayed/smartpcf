@@ -158,12 +158,20 @@
         }
         .interactive-wrapper {
             background: rgba(10, 15, 30, 0.8); border: 1px solid rgba(0, 242, 254, 0.3);
-            border-radius: 20px; padding: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.6), inset 0 0 30px rgba(0,242,254,0.05);
-            backdrop-filter: blur(15px); position: relative; display: flex; justify-content: center; align-items: center;
+            border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.6), inset 0 0 30px rgba(0,242,254,0.05);
+            backdrop-filter: blur(15px); position: relative; 
+            width: 100%; aspect-ratio: 2.2 / 1; min-height: 300px; max-height: 600px;
+            overflow: hidden;
         }
         .interactive-img {
-            width: 100%; height: auto; border-radius: 10px;
-            filter: invert(1) hue-rotate(180deg) brightness(1.1) contrast(1.2); mix-blend-mode: screen; display: block;
+            position: absolute;
+            height: 220%; /* Scaled to perfectly fit the full circle */
+            width: auto;
+            top: 50%; left: 50%;
+            transform: translate(-75.5%, -47%); /* Centers the right diagram */
+            filter: invert(1) hue-rotate(180deg) brightness(1.1) contrast(1.2); mix-blend-mode: screen; 
+            clip-path: inset(12% 8% 12% 58%); /* Mathematically hides the square borders and text */
+            display: block;
         }
         .hotspot { position: absolute; width: 20px; height: 20px; transform: translate(-50%, -50%); cursor: pointer; z-index: 10; }
         .pulse { width: 100%; height: 100%; background: #00f2fe; border-radius: 50%; box-shadow: 0 0 10px #00f2fe; animation: ripple 2s infinite; }
@@ -179,7 +187,7 @@
             content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
             border-width: 8px; border-style: solid; border-color: #00f2fe transparent transparent transparent;
         }
-        .hotspot:hover .tooltip { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+        .hotspot.active .tooltip { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
         .tooltip strong { display: block; color: #00f2fe; margin-bottom: 5px; font-size: 1.05rem; }
 
         .cards-container { display: flex; flex-direction: column; gap: 20px; justify-content: space-between; }
@@ -331,11 +339,22 @@
     <div class="tech-layout">
         <!-- Interactive Image -->
         <div class="interactive-wrapper slide-in-left delay-4">
-            <img src="assets/img/pcf-mode1.jpg" class="interactive-img" alt="PCF Core Structure" onerror="this.src='https://placehold.co/800x800/0a0f1e/00f2fe?text=PCF+Sensor'">
-            <div class="hotspot" style="top: 50%; left: 50%;"><div class="pulse"></div><div class="tooltip"><strong>Core (Silica)</strong><p>The central solid region guiding the light.</p></div></div>
-            <div class="hotspot" style="top: 25%; left: 50%;"><div class="pulse" style="background: #fbbf24; box-shadow: 0 0 10px #fbbf24;"></div><div class="tooltip"><strong style="color: #fbbf24;">Plasmonic Gold Layer</strong><p>50nm thick. Facilitates SPR.</p></div></div>
-            <div class="hotspot" style="top: 65%; left: 35%;"><div class="pulse" style="background: #93c5fd; box-shadow: 0 0 10px #93c5fd;"></div><div class="tooltip"><strong style="color: #93c5fd;">Air Holes</strong><p>Lowers cladding index to confine light.</p></div></div>
-            <div class="hotspot" style="top: 20%; left: 75%;"><div class="pulse" style="background: #f472b6; box-shadow: 0 0 10px #f472b6;"></div><div class="tooltip"><strong style="color: #f472b6;">Analyte Channel</strong><p>Sample flows here. Changes RI drastically.</p></div></div>
+            <img src="assets/img/pcf-comparison.png" class="interactive-img" alt="PCF Core Mode" onerror="this.src='https://placehold.co/1200x600/0a0f1e/00f2fe?text=PCF+Comparison'">
+            
+            <!-- Central Air Hole -->
+            <div class="hotspot" style="top: 50%; left: 50%;"><div class="pulse" style="background: #94a3b8; box-shadow: 0 0 15px #94a3b8;"></div><div class="tooltip"><strong style="color: #94a3b8;">Central Air Hole</strong><p>Separates the solid region to create a dual-core structure, optimizing phase matching.</p></div></div>
+            
+            <!-- Left Core -->
+            <div class="hotspot" style="top: 50%; left: 45%;"><div class="pulse" style="background: #ef4444; box-shadow: 0 0 15px #ef4444;"></div><div class="tooltip"><strong style="color: #ef4444;">Left Guided Core</strong><p>Optical field is tightly confined (red/orange) in the fused silica before SPR coupling.</p></div></div>
+            
+            <!-- Right Core -->
+            <div class="hotspot" style="top: 50%; left: 55%;"><div class="pulse" style="background: #ef4444; box-shadow: 0 0 15px #ef4444;"></div><div class="tooltip"><strong style="color: #ef4444;">Right Guided Core</strong><p>The secondary core works symmetrically to enhance the overall sensitivity of the sensor.</p></div></div>
+
+            <!-- Microstructured Air Holes (Top) -->
+            <div class="hotspot" style="top: 22%; left: 50%;"><div class="pulse" style="background: #00f2fe; box-shadow: 0 0 15px #00f2fe;"></div><div class="tooltip"><strong style="color: #00f2fe;">Microstructured Cladding</strong><p>Array of air holes designed to lower the effective refractive index, forcing light into the core.</p></div></div>
+
+            <!-- Outer Boundary / Plasmonic Interface -->
+            <div class="hotspot" style="top: 50%; left: 66%;"><div class="pulse" style="background: #fbbf24; box-shadow: 0 0 15px #fbbf24;"></div><div class="tooltip"><strong style="color: #fbbf24;">Plasmonic Interface</strong><p>The boundary where the gold layer will interact with the optical mode at resonance.</p></div></div>
         </div>
 
         <!-- 4 Cards -->
@@ -418,6 +437,27 @@
             p.style.height = size + 'px';
             particlesContainer.appendChild(p);
         }
+
+        // Hotspot click logic
+        const hotspots = document.querySelectorAll('.hotspot');
+        hotspots.forEach(hotspot => {
+            hotspot.addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevent closing immediately
+                
+                // Close all other hotspots
+                hotspots.forEach(h => {
+                    if (h !== hotspot) h.classList.remove('active');
+                });
+                
+                // Toggle the clicked one
+                this.classList.toggle('active');
+            });
+        });
+
+        // Click anywhere else to close all tooltips
+        document.addEventListener('click', function() {
+            hotspots.forEach(h => h.classList.remove('active'));
+        });
     </script>
 </body>
 
