@@ -1,3 +1,8 @@
+﻿<!--
+  Copyright (c) 2026 Smart IoT Project Authors. All Rights Reserved.
+  This source code is proprietary and confidential.
+  Unauthorized copying of this file, via any medium is strictly prohibited.
+-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -268,7 +273,6 @@
 </head>
 
 <body>
-    <!-- Background Elements -->
     <div class="glow-blob blob-1"></div>
     <div class="glow-blob blob-2"></div>
     <div class="particles-container" id="particles"></div>
@@ -293,7 +297,6 @@
         <p>A comprehensive breakdown of the Smart Healthcare System, combining advanced Plasmonic sensors, IoT gateways, and Machine Learning analytics.</p>
     </section>
 
-    <!-- Restored Section: 5 Core Pillars -->
     <div class="pillars-container fade-up delay-1">
         <div class="pillar-card"><div class="pillar-icon-wrapper"><i class="fas fa-heartbeat pillar-icon"></i></div><h3>Early Detection</h3></div>
         <div class="pillar-card"><div class="pillar-icon-wrapper"><i class="fas fa-wifi pillar-icon"></i></div><h3>IoT Integration</h3></div>
@@ -302,7 +305,6 @@
         <div class="pillar-card"><div class="pillar-icon-wrapper"><i class="fas fa-database pillar-icon"></i></div><h3>Real-Time Monitoring</h3></div>
     </div>
 
-    <!-- New Advanced PCF Sensor Design -->
     <h2 class="section-headline fade-up delay-2">Plasmonic PCF-SPR <span>Biosensor</span></h2>
     
     <div class="workflow-diagram fade-up delay-2">
@@ -337,27 +339,20 @@
     </div>
 
     <div class="tech-layout">
-        <!-- Interactive Image -->
         <div class="interactive-wrapper slide-in-left delay-4">
             <img src="assets/img/pcf-comparison.png" class="interactive-img" alt="PCF Core Mode" onerror="this.src='https://placehold.co/1200x600/0a0f1e/00f2fe?text=PCF+Comparison'">
             
-            <!-- Central Air Hole -->
             <div class="hotspot" style="top: 50%; left: 50%;"><div class="pulse" style="background: #94a3b8; box-shadow: 0 0 15px #94a3b8;"></div><div class="tooltip"><strong style="color: #94a3b8;">Central Air Hole</strong><p>Separates the solid region to create a dual-core structure, optimizing phase matching.</p></div></div>
             
-            <!-- Left Core -->
             <div class="hotspot" style="top: 50%; left: 45%;"><div class="pulse" style="background: #ef4444; box-shadow: 0 0 15px #ef4444;"></div><div class="tooltip"><strong style="color: #ef4444;">Left Guided Core</strong><p>Optical field is tightly confined (red/orange) in the fused silica before SPR coupling.</p></div></div>
             
-            <!-- Right Core -->
             <div class="hotspot" style="top: 50%; left: 55%;"><div class="pulse" style="background: #ef4444; box-shadow: 0 0 15px #ef4444;"></div><div class="tooltip"><strong style="color: #ef4444;">Right Guided Core</strong><p>The secondary core works symmetrically to enhance the overall sensitivity of the sensor.</p></div></div>
 
-            <!-- Microstructured Air Holes (Top) -->
             <div class="hotspot" style="top: 22%; left: 50%;"><div class="pulse" style="background: #00f2fe; box-shadow: 0 0 15px #00f2fe;"></div><div class="tooltip"><strong style="color: #00f2fe;">Microstructured Cladding</strong><p>Array of air holes designed to lower the effective refractive index, forcing light into the core.</p></div></div>
 
-            <!-- Outer Boundary / Plasmonic Interface -->
             <div class="hotspot" style="top: 50%; left: 66%;"><div class="pulse" style="background: #fbbf24; box-shadow: 0 0 15px #fbbf24;"></div><div class="tooltip"><strong style="color: #fbbf24;">Plasmonic Interface</strong><p>The boundary where the gold layer will interact with the optical mode at resonance.</p></div></div>
         </div>
 
-        <!-- 4 Cards -->
         <div class="cards-container slide-in-right delay-4">
             <div class="comp-card">
                 <div class="icon-box ic-air"><i class="fas fa-braille"></i></div>
@@ -388,7 +383,6 @@
         <div class="b-stat"><i class="fas fa-bolt"></i> <strong>Sensitivity :</strong> Ultra-High</div>
     </div>
 
-    <!-- Restored Section: IoT Complete Workflow -->
     <div class="workflow-section">
         <h2 class="section-headline">IoT Healthcare <span>Workflow</span></h2>
         <div class="design-container reverse">
@@ -424,7 +418,6 @@
 
     <script src="assets/js/script.js"></script>
     <script>
-        // Floating particles
         const particlesContainer = document.getElementById('particles');
         for (let i = 0; i < 20; i++) {
             const p = document.createElement('div');
@@ -438,23 +431,19 @@
             particlesContainer.appendChild(p);
         }
 
-        // Hotspot click logic
         const hotspots = document.querySelectorAll('.hotspot');
         hotspots.forEach(hotspot => {
             hotspot.addEventListener('click', function(e) {
                 e.stopPropagation(); // Prevent closing immediately
                 
-                // Close all other hotspots
                 hotspots.forEach(h => {
                     if (h !== hotspot) h.classList.remove('active');
                 });
                 
-                // Toggle the clicked one
                 this.classList.toggle('active');
             });
         });
 
-        // Click anywhere else to close all tooltips
         document.addEventListener('click', function() {
             hotspots.forEach(h => h.classList.remove('active'));
         });

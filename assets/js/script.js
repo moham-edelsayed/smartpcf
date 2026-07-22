@@ -1,4 +1,8 @@
-// Navbar scroll effect
+﻿/*
+  Copyright (c) 2026 Smart IoT Project Authors. All Rights Reserved.
+  This source code is proprietary and confidential.
+  Unauthorized copying of this file, via any medium is strictly prohibited.
+*/
 const navbar = document.querySelector('.navbar');
 window.addEventListener('scroll', () => {
     if (window.scrollY > 50) {
@@ -8,14 +12,12 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Mobile menu toggle
 const hamburger = document.querySelector('.hamburger');
 const navLinks = document.querySelector('.nav-links');
 
 hamburger.addEventListener('click', () => {
     navLinks.classList.toggle('active');
     
-    // Toggle icon
     const icon = hamburger.querySelector('i');
     if (navLinks.classList.contains('active')) {
         icon.classList.remove('fa-bars');
@@ -26,7 +28,6 @@ hamburger.addEventListener('click', () => {
     }
 });
 
-// Close mobile menu when clicking a link
 document.querySelectorAll('.nav-links a').forEach(link => {
     link.addEventListener('click', () => {
         navLinks.classList.remove('active');
@@ -36,7 +37,6 @@ document.querySelectorAll('.nav-links a').forEach(link => {
     });
 });
 
-// Form submission simulation
 const contactForm = document.querySelector('.contact-form');
 if (contactForm) {
     contactForm.addEventListener('submit', (e) => {
@@ -44,12 +44,10 @@ if (contactForm) {
         const btn = contactForm.querySelector('button');
         const originalText = btn.innerText;
         
-        // Change button state
         btn.innerText = 'Sending Message...';
         btn.style.opacity = '0.8';
         btn.style.pointerEvents = 'none';
         
-        // Simulate network request
         setTimeout(() => {
             btn.innerText = 'Message Sent Successfully!';
             btn.style.background = 'linear-gradient(90deg, #10b981, #059669)'; 
@@ -57,7 +55,6 @@ if (contactForm) {
             btn.style.boxShadow = '0 4px 15px rgba(16, 185, 129, 0.4)';
             contactForm.reset();
             
-            // Revert button after 3 seconds
             setTimeout(() => {
                 btn.innerText = originalText;
                 btn.style.background = '';
@@ -70,7 +67,6 @@ if (contactForm) {
     });
 }
 
-// Add simple scroll animation for elements
 const observerOptions = {
     root: null,
     rootMargin: '0px',
@@ -87,7 +83,6 @@ const observer = new IntersectionObserver((entries, observer) => {
     });
 }, observerOptions);
 
-// Apply fade-up animation initial state to elements
 document.querySelectorAll('.booklet-info, .info-item').forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(30px)';
@@ -95,23 +90,19 @@ document.querySelectorAll('.booklet-info, .info-item').forEach(el => {
     observer.observe(el);
 });
 
-// Add Watermark (محمد السيد)
 const watermark = document.createElement('div');
 watermark.className = 'site-watermark';
 watermark.innerHTML = '<div class="watermark-content"><i class="fas fa-code"></i><div class="text-group"><span>Developed By</span><strong>Mohamed Elsayed</strong></div></div>';
 document.body.appendChild(watermark);
 
-// Speech Synthesis for Team Members (Arabic Name on Hover)
 const teamImages = document.querySelectorAll('.team-card img');
 if (teamImages.length > 0) {
     teamImages.forEach(img => {
         img.addEventListener('mouseenter', () => {
             const title = img.getAttribute('title');
             if (title && title.includes('-')) {
-                // Extract the Arabic name
                 const arabicName = title.split('-')[1].trim();
                 
-                // Cancel any ongoing speech
                 if (window.speechSynthesis.speaking) {
                     window.speechSynthesis.cancel();
                 }
@@ -123,11 +114,6 @@ if (teamImages.length > 0) {
             }
         });
 
-        // Optional: stop speaking when mouse leaves, but names are short enough
-        // img.addEventListener('mouseleave', () => {
-        //     if (window.speechSynthesis.speaking) {
-        //         window.speechSynthesis.cancel();
-        //     }
-        // });
     });
 }
+

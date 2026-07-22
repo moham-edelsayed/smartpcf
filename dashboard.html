@@ -1,3 +1,8 @@
+﻿<!--
+  Copyright (c) 2026 Smart IoT Project Authors. All Rights Reserved.
+  This source code is proprietary and confidential.
+  Unauthorized copying of this file, via any medium is strictly prohibited.
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +10,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart IoT Healthcare System - Live Data</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Link to the main style for the Navbar -->
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
@@ -159,7 +163,6 @@
 </head>
 <body>
 
-    <!-- Main Navigation Bar (Original site style) -->
     <nav class="navbar">
         <div class="logo">IoT<span>Health</span></div>
         <ul class="nav-links">
@@ -178,7 +181,6 @@
     <div class="dashboard-wrapper">
         <div class="dashboard-container">
             
-            <!-- Dashboard Header / Status -->
             <div class="dashboard-header">
                 <div class="device-info">
                     <div class="device-icon"><i class="fas fa-satellite-dish"></i></div>
@@ -197,22 +199,18 @@
                 </div>
             </div>
 
-            <!-- CRM Grid Layout -->
             <div class="grid-container">
                 
-                <!-- Box 1: SpO2 -->
                 <div class="box box-spo2">
                     <div class="box-header">Blood Oxygen (SpO2)</div>
                     <div class="box-value" id="valSpo2">-- <span>%</span></div>
                 </div>
 
-                <!-- Box 2: BPM -->
                 <div class="box box-bpm">
                     <div class="box-header">Heart Rate (BPM)</div>
                     <div class="box-value" id="valBpm">-- <span>bpm</span></div>
                 </div>
 
-                <!-- Mini Boxes: Room Temp & Humidity -->
                 <div class="box-mini">
                     <div class="mini-item">
                         <div style="display:flex; align-items:center;">
@@ -230,7 +228,6 @@
                     </div>
                 </div>
 
-                <!-- Main Line Chart -->
                 <div class="box box-main-chart">
                     <div class="chart-title">
                         Vitals History
@@ -242,25 +239,21 @@
                     <div id="chartMain" class="echart-container"></div>
                 </div>
 
-                <!-- Area Chart -->
                 <div class="box box-area-chart">
                     <div class="chart-title">Body Temp Trend</div>
                     <div id="chartArea" class="echart-container"></div>
                 </div>
 
-                <!-- Room Temp Ring -->
                 <div class="box box-donut">
                     <div class="chart-title" style="justify-content:center;">Room Temp</div>
                     <div id="chartRoomTempRing" class="echart-container"></div>
                 </div>
 
-                <!-- Body Temp Ring -->
                 <div class="box box-ring">
                     <div class="chart-title" style="justify-content:center;">Body Temp</div>
                     <div id="chartBodyTempRing" class="echart-container"></div>
                 </div>
 
-                <!-- Humidity Ring -->
                 <div class="box box-bar">
                     <div class="chart-title" style="justify-content:center;">Humidity</div>
                     <div id="chartHumRing" class="echart-container"></div>
@@ -268,7 +261,6 @@
 
             </div>
 
-            <!-- AI Summary Box -->
             <div class="ai-summary-card">
                 <div class="ai-summary-header">
                     <div class="header-title-wrap">
@@ -280,7 +272,6 @@
                         <i class="fas fa-spinner fa-spin"></i> Collecting data...
                     </div>
                 </div>
-                <!-- Play Voice Audio Button -->
                 <button id="voiceAnalysisBtn" class="voice-btn">
                     <i class="fas fa-volume-up"></i> <span>Play Audio Analysis</span>
                 </button>
@@ -289,10 +280,8 @@
         </div>
     </div>
 
-    <!-- Scripts -->
     <script src="assets/js/script.js"></script>
     <script>
-        // --- ECharts Configurations (Matching Image Styles) --- //
 
         const chartMain = echarts.init(document.getElementById('chartMain'));
         chartMain.setOption({
@@ -362,11 +351,9 @@
         });
 
 
-        // --- Data Fetching & AI Logic --- //
         const firebaseUrl = "https://doctorr-0123-default-rtdb.firebaseio.com/Patient_Data.json?auth=EobFABS2sZkqP ব্যথাBolKuex8oJQdDhsT7NUUDnQOoVA"; // Wait, fixing invalid characters in URL manually just in case
         const validFirebaseUrl = "https://doctorr-0123-default-rtdb.firebaseio.com/Patient_Data.json?auth=EobFABS2sZkqPBolKuex8oJQdDhsT7NUUDnQOoVA";
 
-        // Pre-fill history arrays with realistic baseline data so the charts look active instantly
         let histSpo2 = Array.from({length: 20}, () => Math.floor(Math.random() * (99 - 95 + 1)) + 95);
         let histBpm = Array.from({length: 20}, () => Math.floor(Math.random() * (85 - 70 + 1)) + 70);
         let histTemp = Array.from({length: 20}, () => 36.5 + (Math.random() * 1.5));
@@ -377,7 +364,6 @@
         let currentSpeechText = "";
         let isSpeaking = false;
 
-        // Sound Generator
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let isBeepEnabled = false;
 
@@ -465,26 +451,22 @@
                         }
                     }
 
-                    // Update Top UI
                     document.getElementById('valSpo2').innerHTML = spo2Val + ' <span>%</span>';
                     document.getElementById('valBpm').innerHTML = (isBpmString ? '--' : bpmVal) + ' <span>bpm</span>';
                     document.getElementById('valRoomTemp').innerText = tempVal + ' °C';
                     document.getElementById('valHum').innerText = humVal + ' %';
 
-                    // Update History Arrays
                     histSpo2.shift(); histSpo2.push(spo2Val);
                     histBpm.shift(); histBpm.push(isBpmString ? 0 : bpmVal);
                     histTemp.shift(); histTemp.push(bodyTempVal > 0 ? bodyTempVal : 30);
                     histHum.shift(); histHum.push(humVal);
 
-                    // Update Charts
                     chartMain.setOption({ series: [{ data: histSpo2 }, { data: histBpm }] });
                     chartArea.setOption({ series: [{ data: histTemp }] });
                     chartRoomTempRing.setOption({ series: [{ data: [{value: tempVal > 0 ? tempVal : 0, name: 'Room Temp'}] }] });
                     chartBodyTempRing.setOption({ series: [{ data: [{value: bodyTempVal > 0 ? bodyTempVal : 0, name: 'Body Temp'}] }] });
                     chartHumRing.setOption({ series: [{ data: [{value: humVal > 0 ? humVal : 0, name: 'Humidity'}] }] });
 
-                    // --- Generate AI Report UI and Speech ---
                     let analysisHTML = "<ul>";
                     let issues = 0;
                     let speech = "";
@@ -573,7 +555,6 @@
             }
         }
 
-        // Voice Synthesis Toggle Logic
         document.getElementById('voiceAnalysisBtn').addEventListener('click', () => {
             if (!currentSpeechText) return;
             const btn = document.getElementById('voiceAnalysisBtn');
@@ -626,3 +607,4 @@
     </script>
 </body>
 </html>
+

@@ -1,3 +1,8 @@
+﻿<!--
+  Copyright (c) 2026 Smart IoT Project Authors. All Rights Reserved.
+  This source code is proprietary and confidential.
+  Unauthorized copying of this file, via any medium is strictly prohibited.
+-->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -60,7 +65,6 @@
             }
         }
 
-        // Handle file uploads
         document.getElementById('upSlide').onchange = e => loadFile(e.target.files[0], baseImg);
         document.getElementById('upLogo1').onchange = e => loadFile(e.target.files[0], logo1);
         document.getElementById('upLogo2').onchange = e => loadFile(e.target.files[0], logo2);
@@ -80,18 +84,14 @@
                 canvas.width = baseImg.width;
                 canvas.height = baseImg.height;
                 
-                // Enable high quality smoothing
                 ctx.imageSmoothingEnabled = true;
                 ctx.imageSmoothingQuality = 'high';
 
-                // Draw base
                 ctx.drawImage(baseImg, 0, 0);
 
-                // Get background color from top center
                 const bgData = ctx.getImageData(canvas.width / 2, 50, 1, 1).data;
                 const bgColor = `rgb(${bgData[0]}, ${bgData[1]}, ${bgData[2]})`;
 
-                // --- 1. HIGH QUALITY DOWNSCALING FUNCTION ---
                 function drawHQ(imgObj, dx, dy, dw, dh) {
                     let tempCanvas = document.createElement('canvas');
                     let tCtx = tempCanvas.getContext('2d');
@@ -101,7 +101,6 @@
                     tempCanvas.height = ch;
                     tCtx.drawImage(imgObj, 0, 0);
                     
-                    // Step down by half iteratively for ultra-smooth anti-aliasing
                     while (cw > dw * 2) {
                         cw = Math.floor(cw / 2);
                         ch = Math.floor(ch / 2);
@@ -117,15 +116,12 @@
                     ctx.drawImage(tempCanvas, 0, 0, cw, ch, dx, dy, dw, dh);
                 }
 
-                // --- 2. CALCULATE NEW SIZES ---
-                // We make them large enough to cover the old logos naturally (about 11% of width)
                 const targetW1 = canvas.width * 0.11;
                 const targetH1 = targetW1; 
                 
                 const targetW2 = canvas.width * 0.11;
                 const targetH2 = targetW2;
 
-                // Adjust padding so they cover the exact spot of the old logos
                 const newPadX = canvas.width * 0.035;
                 const newPadY = canvas.height * 0.03; 
 
@@ -135,7 +131,6 @@
                 const y2 = newPadY;
 
 
-                // --- 3. DRAW LOGO 1 (INSTITUTE) as a CIRCLE ---
                 const cx1 = x1 + targetW1/2;
                 const cy1 = y1 + targetH1/2;
                 const r1 = targetW1/2;
@@ -148,11 +143,9 @@
 
                 ctx.fillStyle = "white"; // White background
                 ctx.fill();
-                // Draw logo 1 using High Quality Downscaling
                 drawHQ(logo1, x1, y1, targetW1, targetH1);
                 ctx.restore();
 
-                // Draw a nice golden border around Logo 1
                 ctx.beginPath();
                 ctx.arc(cx1, cy1, r1, 0, Math.PI * 2);
                 ctx.lineWidth = 6;
@@ -160,7 +153,6 @@
                 ctx.stroke();
 
 
-                // --- 4. DRAW LOGO 2 (MINISTRY) as a CIRCLE ---
                 const cx2 = x2 + targetW2/2;
                 const cy2 = y2 + targetH2/2;
                 const r2 = targetW2/2;
@@ -173,11 +165,9 @@
 
                 ctx.fillStyle = "white"; // Solid white background for Ministry logo
                 ctx.fill();
-                // Draw logo 2 using High Quality Downscaling
                 drawHQ(logo2, x2, y2, targetW2, targetH2);
                 ctx.restore();
 
-                // Draw a subtle golden border around Logo 2
                 ctx.beginPath();
                 ctx.arc(cx2, cy2, r2, 0, Math.PI * 2);
                 ctx.lineWidth = 4;
@@ -202,3 +192,4 @@
     </script>
 </body>
 </html>
+

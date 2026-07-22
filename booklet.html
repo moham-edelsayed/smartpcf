@@ -1,3 +1,8 @@
+﻿<!--
+  Copyright (c) 2026 Smart IoT Project Authors. All Rights Reserved.
+  This source code is proprietary and confidential.
+  Unauthorized copying of this file, via any medium is strictly prohibited.
+-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -488,16 +493,13 @@
     </nav>
 
     <section class="booklet-section">
-        <!-- Medical/Tech Background -->
         <div class="bg-elements">
             <div class="bg-grid"></div>
             <div class="bg-glow-1"></div>
             <div class="bg-glow-2"></div>
         </div>
 
-        <!-- Section 1: The Booklet -->
         <div class="premium-container">
-            <!-- Left Column: 3D Book & Actions -->
             <div class="left-col">
                 <div class="book-3d-container">
                     <div class="book-3d" onclick="openPdfModal('assets/docs/Final_Project_Book.pdf', 'Smart_IoT_Healthcare_Booklet.pdf')">
@@ -519,7 +521,6 @@
                 </div>
             </div>
 
-            <!-- Right Column: Info & Timeline -->
             <div class="right-col">
                 <div class="header-section">
                     <h1>Project Booklet</h1>
@@ -561,9 +562,7 @@
 
         <div class="divider"></div>
 
-        <!-- Section 2: The Presentation -->
         <div class="premium-container">
-            <!-- Left Column: 3D Screen & Actions -->
             <div class="left-col">
                 <div class="book-3d-container">
                     <div class="book-3d landscape" onclick="openPdfModal('IoT_Healthcare_PCF_SPR_Presentation.pdf', 'IoT Healthcare Presentation')">
@@ -584,7 +583,6 @@
                 </div>
             </div>
 
-            <!-- Right Column: Info & Timeline -->
             <div class="right-col">
                 <div class="header-section">
                     <h1>Project Presentation</h1>
@@ -617,7 +615,6 @@
         </div>
     </section>
 
-    <!-- Interactive PDF Modal -->
     <div class="modal-overlay" id="pdfModalOverlay">
         <div class="modal-content">
             <div class="modal-header">
@@ -628,17 +625,14 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <!-- Using embedded PDF viewer with toolbar=1 for native controls -->
             <iframe class="pdf-frame" id="pdfIframe" src="" title="PDF Viewer"></iframe>
         </div>
     </div>
 
     <script src="assets/js/script.js"></script>
     <script>
-        // Setup PDF.js worker
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-        // Helper to render first page of a PDF onto a canvas
         function renderPdfCover(url, canvasId, loaderId) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
@@ -665,11 +659,7 @@
             });
         }
 
-        // Render booklet cover using PDF.js (Disabled in favor of static image cover)
-        // renderPdfCover('assets/docs/Final_Project_Book.pdf', 'pdfCanvasBooklet', 'pdfLoaderBooklet');
-        // The presentation cover uses a static image to avoid preview errors.
 
-        // Modal Functions
         const modalOverlay = document.getElementById('pdfModalOverlay');
         const pdfIframe = document.getElementById('pdfIframe');
         const modalTitleText = document.getElementById('modalTitleText');
@@ -680,10 +670,8 @@
             document.body.style.overflow = 'hidden';
 
             if(title.includes("Presentation")) {
-                // Use Native Viewer but forced into Fit mode for slide-by-slide experience
                 pdfIframe.src = url + '#toolbar=1&navpanes=0&view=Fit';
             } else {
-                // Booklet mode
                 pdfIframe.src = url + '#toolbar=1&view=FitH';
             }
         }
@@ -696,7 +684,6 @@
             document.body.style.overflow = 'auto';
         }
 
-        // Close modal when clicking outside content
         modalOverlay.addEventListener('click', function(e) {
             if (e.target === this) {
                 closePdfModal();
